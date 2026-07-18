@@ -189,6 +189,7 @@ h2.stage-title{font-family:var(--serif);font-weight:600;font-size:clamp(1.65rem,
 .btn-gold:hover{transform:translateY(2px);box-shadow:0 4px 0 #96742e,0 14px 30px -12px rgba(233,189,99,.5)}
 .btn-gold:active{transform:translateY(6px);box-shadow:0 0 0 #96742e}
 .btn-frame{border:2px solid var(--ink);color:var(--ink);background:transparent;
+  padding:calc(.9em - 2px) calc(1.7em - 2px); /* border分を相殺して金ボタンと同寸に */
   box-shadow:0 6px 0 rgba(242,236,221,.25)}
 .btn-frame:hover{transform:translateY(2px);box-shadow:0 4px 0 rgba(242,236,221,.25);border-color:var(--gold);color:var(--gold-bright)}
 .btn .arrow{font-family:var(--pixel)}
@@ -261,6 +262,9 @@ footer .logo b{color:var(--gold)}
 @media (max-width:760px){
   .stage{padding:88px 0 100px}
   .pxl-clouds{display:none} /* モバイルは見出し可読性を優先 */
+  /* CTAは同じ幅で縦積み（文言の長さで幅が揃わないのを防ぐ） */
+  .clear-cta{flex-direction:column;align-items:center;gap:14px}
+  .clear-cta .btn{width:100%;max-width:340px;justify-content:center}
   .work,.work.alt{grid-template-columns:1fr}
   .work.alt .work-media{order:0}
   .rpg-window{padding:20px 20px}
