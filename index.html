@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>alpapa creative｜心が動く体験を、贈る。</title>
+<meta name="description" content="ゲーム・映像・Web。心が動く体験を、ひとつずつ手づくりするクリエイティブスタジオ。誕生日・記念日に贈る、世界に一つのオーダーメイドゲームを制作しています。">
+<meta property="og:title" content="alpapa creative｜心が動く体験を、贈る。">
+<meta property="og:description" content="ゲーム・映像・Web。心が動く体験を、ひとつずつ手づくりするスタジオ。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://alpapa-creative.github.io/assets/keyvisual.png">
+<meta property="og:url" content="https://alpapa-creative.github.io/">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ========== ローディング画面 ========== -->
+<div id="loader" aria-hidden="true">
+  <div class="loader-inner">
+    <canvas id="loader-sprite" class="px" width="16" height="16"></canvas>
+    <p class="loader-text">NOW LOADING</p>
+    <div class="loader-bar"><i id="loader-fill"></i></div>
+  </div>
+</div>
+
+<!-- ========== HUD ========== -->
+<div id="hud">
+  <div id="hud-bar"></div>
+  <div class="hud-row">
+    <div class="hud-left"><b>alpapa</b> creative</div>
+    <div class="hud-right">
+      <span class="hud-chip" id="hud-stage">STAGE 1-1</span>
+      <span class="hud-chip" id="hud-coin-wrap" title="コイン">
+        <span class="coin-dot"></span><span id="hud-coins">×00</span>
+      </span>
+      <button class="hud-chip" id="hud-sound" aria-pressed="false" title="サウンド">
+        <span class="sound-ic">♪ SOUND</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== タイトル画面 ========== -->
+<header id="title" data-stage="0">
+  <div class="stars"></div>
+  <p class="studio">alpapa creative</p>
+  <h1>心が動く体験を、<br><span class="em">贈る。</span></h1>
+  <p class="sub">ゲームも、映像も、Webも。<br class="pc-only">
+    ひとつずつ手づくりする、小さなクリエイティブスタジオです。</p>
+  <p class="press">SCROLL TO START</p>
+</header>
+
+<!-- ========== STAGE 1: ゲーム（主役） ========== -->
+<section class="stage" id="stage-game" data-stage="1">
+  <div class="pxl-layer pxl-clouds" data-parallax="-0.08"></div>
+  <div class="pxl-layer pxl-hills" data-parallax="0.06"></div>
+  <div class="wrap">
+    <div class="stage-head">
+      <p class="stage-no">STAGE 1 — ORDER-MADE GAME</p>
+      <canvas class="qblock" width="16" height="16" role="button" tabindex="0" aria-label="コインブロック（押すとコイン）"></canvas>
+      <h2 class="stage-title" data-fx="">プレゼントが、ゲームになる。</h2>
+      <p class="stage-lead">誕生日・記念日・還暦・送別に。贈る相手が“主人公”になって遊べる、
+        世界に一つのブラウザゲームをオーダーメイドで制作します。
+        URLをひとつ送るだけ、スマホでそのまま遊べます。</p>
+    </div>
+
+    <div class="rpg-window" data-fx="item" style="margin-bottom:76px">
+      <span class="who">alpapa</span>
+      <p class="type-target" data-type="ここにある作品は、架空の見本ではありません。<br>ぜんぶ、実際に家族や仲間の記念日に作って、贈ってきたゲームです。"></p>
+    </div>
+
+    <div class="works">
+      <div class="work" data-fx="item">
+        <div class="work-media">
+          <video src="assets/bike-play.mp4" muted loop playsinline autoplay preload="metadata"></video>
+          <span class="itemget">じつれきを てにいれた！</span>
+        </div>
+        <div class="work-body">
+          <p class="tag">CASE 01 — じいじの誕生日に</p>
+          <h3>じいじのバイク旅</h3>
+          <p>遠くの我が家まで、愛用のバイクではるばる会いに来る旅路を横スクロールゲームに。
+            家族からの応援メッセージ、ゴールの再会演出、専用のテーマソング付き。</p>
+          <div class="play-row">
+            <span class="badge-live">PLAYABLE DEMO</span>
+            <a class="btn btn-gold" data-link="demo"><span class="arrow">▶</span> 実際に遊んでみる</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="work alt" data-fx="item">
+        <div class="work-media portrait">
+          <video src="assets/jump-rec.mp4" muted loop playsinline autoplay preload="metadata"></video>
+          <span class="itemget">じつれきを てにいれた！</span>
+        </div>
+        <div class="work-body">
+          <p class="tag">CASE 02 — 友人の誕生日に</p>
+          <h3>ジャンプヒーロー</h3>
+          <p>本人の写真をイラスト化した主人公が、制限時間内にビルを駆け上がるジャンプアクション。
+            仲間内のスコアランキングで、贈ったあとも盛り上がりが続きます。</p>
+        </div>
+      </div>
+
+      <div class="work" data-fx="item">
+        <div class="work-media">
+          <video src="assets/kids-rec.mp4" muted loop playsinline autoplay preload="metadata"></video>
+          <span class="itemget">じつれきを てにいれた！</span>
+        </div>
+        <div class="work-body">
+          <p class="tag">CASE 03 — お母さんへ</p>
+          <h3>こどもの絵が、ゲームになる</h3>
+          <p>子どもたちが描いた絵を、そのままゲームのキャラクターに。
+            くっつけて集めるほどスコアが増える、家族にしか作れない一本になりました。</p>
+        </div>
+      </div>
+
+      <div class="work alt" data-fx="item">
+        <div class="work-media">
+          <video src="assets/sticker-rec.mp4" muted loop playsinline autoplay preload="metadata"></video>
+          <span class="itemget">じつれきを てにいれた！</span>
+        </div>
+        <div class="work-body">
+          <p class="tag">CASE 04 — じっくり遊ぶ贈りもの</p>
+          <h3>シールパズル</h3>
+          <p>同じ番号のシールを探して貼っていくと、一枚の絵が完成するパズル。
+            思い出のモチーフをステンドグラス風に仕立てた、静かに没頭できるタイプの贈りものです。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="game-cta" data-fx="">
+      <a class="btn btn-frame" data-link="coconala">ココナラで見る・頼む</a>
+      <a class="btn btn-frame" href="#clear">直接相談する</a>
+      <p class="note-coconala">個人のご依頼はココナラでも受け付けています（匿名でやりとりでき、決済も安心です）。
+        法人企画・大きめの構想は直接どうぞ。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== STAGE 2: 映像 ========== -->
+<section class="stage" id="stage-video" data-stage="2">
+  <div class="wrap">
+    <div class="stage-head">
+      <p class="stage-no">STAGE 2 — FILM & MOTION</p>
+      <canvas class="qblock" width="16" height="16" role="button" tabindex="0" aria-label="コインブロック（押すとコイン）"></canvas>
+      <h2 class="stage-title" data-fx="">映像は、企画からしっかりと。</h2>
+      <p class="stage-lead">法人向けの本格的な映像制作をお受けしています。
+        テンプレートに流し込む量産型ではなく、「何のための映像か」から一緒に組み立てる作り方です。</p>
+    </div>
+    <div class="duo">
+      <div class="rpg-window" data-fx="item">
+        <span class="who">alpapa</span>
+        <p class="type-target" data-type="映像制作歴は10年以上。<br>企業イベントの上映作品や、周年・採用・ブランディングの映像を手がけてきました。"></p>
+      </div>
+      <div class="fact" data-fx="">
+        <b>守秘のため、社名・作品はここには載せていません。</b><br>
+        お問い合わせいただいた方には、可能な範囲でご紹介します。
+        <p class="small-note">※ 単発の編集代行など、小規模な映像案件はお受けしていません。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== STAGE 3: Web ========== -->
+<section class="stage" id="stage-web" data-stage="3">
+  <div class="wrap">
+    <div class="stage-head">
+      <p class="stage-no">STAGE 3 — WEB</p>
+      <canvas class="qblock" width="16" height="16" role="button" tabindex="0" aria-label="コインブロック（押すとコイン）"></canvas>
+      <h2 class="stage-title" data-fx="">このサイトのようなWebを。</h2>
+      <p class="stage-lead">読み込みの速い、体験のあるWebサイトをつくります。
+        いちばん分かりやすい実績は、いまあなたがスクロールしているこのページです。</p>
+    </div>
+    <div class="duo">
+      <p class="selfproof" data-fx="item">&gt; このサイトは フレームワークもテンプレートも使わず、<br>
+        &gt; HTML / CSS / JavaScript の手書きだけで動いています。<br>
+        &gt; コイン、会話ウィンドウ、足元を歩くキャラも、ぜんぶ自作です。</p>
+      <div class="fact" data-fx="">
+        <b>遊び心と実用のバランスは、案件ごとに調整します。</b><br>
+        コーポレートサイトのような真面目な題材でも、「体験として気持ちいい」水準まで作り込みます。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== つくりかた ========== -->
+<section class="stage" id="flow">
+  <div class="wrap">
+    <div class="stage-head">
+      <p class="stage-no">HOW IT WORKS</p>
+      <canvas class="qblock" width="16" height="16" role="button" tabindex="0" aria-label="コインブロック（押すとコイン）"></canvas>
+      <h2 class="stage-title" data-fx="">つくりかた</h2>
+      <p class="stage-lead">ゲームも映像もWebも、進め方は同じです。</p>
+    </div>
+    <div class="quests">
+      <div class="quest" data-fx="">
+        <h3>きく</h3>
+        <p>贈る相手のこと、会社のこと、伝えたいこと。まずエピソードから伺います。</p>
+      </div>
+      <div class="quest" data-fx="">
+        <h3>企画する</h3>
+        <p>案を1〜2つご提案して、方向性を一緒に決めます。ここまでは無料です。</p>
+      </div>
+      <div class="quest" data-fx="">
+        <h3>つくる</h3>
+        <p>制作中は進捗をご報告。ギフトゲームは初稿まで約7日が目安です。</p>
+      </div>
+      <div class="quest" data-fx="">
+        <h3>とどける</h3>
+        <p>URLやファイルで納品。ギフトはお渡し日から逆算してスケジュールを組みます。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CLEAR!（問い合わせ） ========== -->
+<section class="stage" id="clear" data-stage="4">
+  <div class="wrap">
+    <p class="clear-word" data-fx="clear">CLEAR!</p>
+    <p class="clear-sub">つぎは、あなたの番です。</p>
+    <div class="result" data-fx="">
+      <b>おかね</b><span class="dots"> ………… </span>内容に合わせて柔軟に<br>
+      <b>ちいさく</b><span class="dots"> ……… </span>まず小さく試すのも歓迎<br>
+      <b>おおきく</b><span class="dots"> ……… </span>企画からしっかり組むのも歓迎
+    </div>
+    <div class="clear-cta">
+      <a class="btn btn-gold" data-link="coconala">ゲーム制作の相談 → ココナラ</a>
+      <a class="btn btn-frame" data-link="form">映像・Web・そのほかの相談 → フォーム</a>
+    </div>
+    <p id="form-pending" class="clear-note" hidden>※ 映像・Web等の相談フォームは準備中です。もうしばらくお待ちください。</p>
+    <p class="clear-note">価格は決めつけずに、内容とご予算を伺ってからご提案します。<br>
+      手づくりのため、同時にお受けできる件数には限りがあります。</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p class="logo"><b>alpapa</b> creative</p>
+    <p>心が動く体験を、贈る。</p>
+  </div>
+</footer>
+
+<!-- E9: 歩くキャラ / 地面 -->
+<div id="ground"></div>
+<div id="walker"><canvas id="walker-canvas" class="px"></canvas></div>
+
+<!-- 隠しコマンドのメッセージ -->
+<div id="secret-msg" role="status">
+  <b>かくしコマンドを はっけんした！</b><br>
+  ……こういう仕掛けも、つくれます。
+</div>
+
+<script src="logic.js"></script>
+<script src="game.js"></script>
+</body>
+</html>

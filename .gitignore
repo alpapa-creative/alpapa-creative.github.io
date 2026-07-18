@@ -1,0 +1,9 @@
+# 公開リポジトリにはサイト本体のみ載せる（内部ドキュメント・開発補助は除外）
+dev-server.cjs
+.claude/
+.DS_Store
+*.log
+SPEC.md
+README.md
+v0-giftgame-lp.html
+tests/

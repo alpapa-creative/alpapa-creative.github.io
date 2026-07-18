@@ -1,0 +1,270 @@
+/* alpapa creative — 「心が動く体験を、贈る。」
+   デザイン方針: ドット絵・ゲームUIの記号を正確に引用しつつ、組版と余白はモダンに保つ。
+   （SPEC §7。テンプレ的カード横並び・絵文字アイコンは禁止） */
+
+/* ========== 基礎 ========== */
+:root{
+  --bg:#0a0d1a; --bg-warm:#141126; --bg-video:#0d0a14; --bg-web:#0a1420; --bg-clear:#132012;
+  --ink:#f2ecdd; --muted:#aeb4c9; --faint:#7d84a0;
+  --gold:#e9bd63; --gold-bright:#ffd98a; --violet:#8b7bf0; --green:#7ee8a2; --rose:#e88fb8;
+  --window-bg:#101530; --window-border:#f2ecdd;
+  --line:rgba(242,236,221,.12);
+  --serif:"Hiragino Mincho ProN","Yu Mincho",YuMincho,"Noto Serif JP",serif;
+  --sans:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic",YuGothic,"Noto Sans JP",system-ui,sans-serif;
+  --pixel:"Osaka-Mono","MS Gothic",Menlo,Consolas,monospace; /* 疑似ドット系（外部フォント不使用） */
+  --wrap:1040px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.9;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+img,video,canvas{max-width:100%;display:block}
+a{color:inherit}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
+::selection{background:var(--gold);color:#241a05}
+
+/* ドット記号は常にカクカクに */
+.px{image-rendering:pixelated}
+
+/* ========== ローディング画面 ========== */
+#loader{position:fixed;inset:0;z-index:300;background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .4s ease}
+#loader.done{opacity:0;pointer-events:none}
+.loader-inner{text-align:center}
+#loader-sprite{width:48px;height:48px;margin:0 auto 18px;image-rendering:pixelated}
+.loader-text{font-family:var(--pixel);font-size:.8rem;letter-spacing:.4em;padding-left:.4em;
+  color:var(--gold);animation:blink 1.1s steps(2,jump-none) infinite;margin-bottom:16px}
+.loader-bar{width:200px;height:12px;margin:0 auto;border:2px solid var(--ink);border-radius:2px;
+  padding:2px;background:rgba(255,255,255,.04)}
+#loader-fill{display:block;height:100%;width:0;border-radius:1px;
+  background:repeating-linear-gradient(90deg,var(--gold) 0 6px,var(--gold-bright) 6px 8px);
+  transition:width .25s steps(8)}
+@media (prefers-reduced-motion: reduce){
+  .loader-text{animation:none}
+  #loader-fill{transition:none}
+}
+
+/* ========== HUD（進行ゲージ / STAGE / コイン / サウンド） ========== */
+#hud{position:fixed;inset:0 0 auto 0;z-index:100;pointer-events:none}
+#hud-bar{position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-bright));
+  transform-origin:0 50%;transform:scaleX(0);box-shadow:0 0 12px rgba(233,189,99,.7)}
+.hud-row{display:flex;justify-content:space-between;align-items:center;padding:14px 18px 0}
+.hud-left{font-family:var(--serif);font-size:1rem;letter-spacing:.06em;pointer-events:auto;
+  text-shadow:0 2px 12px rgba(0,0,0,.8)}
+.hud-left b{color:var(--gold)}
+.hud-right{display:flex;gap:14px;align-items:center;pointer-events:auto}
+.hud-chip{font-family:var(--pixel);font-size:.72rem;letter-spacing:.1em;color:var(--ink);
+  background:rgba(10,13,26,.72);border:1px solid var(--line);padding:.35em .7em;
+  backdrop-filter:blur(6px);user-select:none}
+#hud-coin-wrap{display:flex;align-items:center;gap:.45em;cursor:pointer}
+#hud-coin-wrap.bump{animation:bump .3s}
+@keyframes bump{40%{transform:scale(1.25)}}
+.coin-dot{width:13px;height:13px;border-radius:50%;position:relative;
+  background:radial-gradient(circle at 35% 30%,var(--gold-bright),var(--gold) 55%,#b9903f);
+  box-shadow:inset 0 0 0 1.5px #8a6a2a,0 0 6px rgba(233,189,99,.8)}
+.coin-dot::after{content:"";position:absolute;left:50%;top:3px;bottom:3px;width:2px;
+  transform:translateX(-50%);border-radius:1px;background:#c99a3f} /* コインの縦スリット */
+#hud-sound{cursor:pointer;border:1px solid var(--line);background:rgba(10,13,26,.72)}
+#hud-sound .sound-ic{opacity:.45}
+#hud-sound.is-on .sound-ic{opacity:1;color:var(--gold-bright)}
+
+/* ========== タイトル画面 ========== */
+#title{min-height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;
+  text-align:center;position:relative;overflow:hidden;padding:90px 24px 110px;
+  background:
+    radial-gradient(900px 500px at 80% -10%,rgba(139,123,240,.22),transparent 60%),
+    radial-gradient(700px 420px at 10% 105%,rgba(233,189,99,.12),transparent 55%),
+    var(--bg)}
+/* 星空（CSSのみ） */
+#title .stars{position:absolute;inset:0;pointer-events:none;background-image:
+  radial-gradient(1.5px 1.5px at 12% 22%,#fff8,transparent 100%),
+  radial-gradient(1px 1px at 68% 12%,#fff7,transparent 100%),
+  radial-gradient(1.5px 1.5px at 84% 34%,#fff6,transparent 100%),
+  radial-gradient(1px 1px at 32% 8%,#fff5,transparent 100%),
+  radial-gradient(1px 1px at 48% 30%,#fff6,transparent 100%),
+  radial-gradient(1.5px 1.5px at 91% 74%,#fff5,transparent 100%),
+  radial-gradient(1px 1px at 6% 64%,#fff6,transparent 100%),
+  radial-gradient(1px 1px at 55% 82%,#fff4,transparent 100%);
+  animation:twinkle 5s ease-in-out infinite alternate}
+@keyframes twinkle{to{opacity:.45}}
+#title .studio{font-family:var(--pixel);font-size:.72rem;letter-spacing:.5em;color:var(--gold);
+  text-transform:uppercase;margin-bottom:2.2em;padding-left:.5em}
+#title h1{font-family:var(--serif);font-weight:600;font-size:clamp(2.1rem,8.4vw,4.4rem);
+  line-height:1.4;letter-spacing:.04em}
+#title h1 .em{background:linear-gradient(100deg,var(--gold-bright),var(--gold));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+#title .sub{margin-top:2em;color:var(--muted);font-size:clamp(.86rem,2.6vw,1rem);line-height:2.2}
+#title .press{position:absolute;bottom:56px;left:0;right:0;
+  font-family:var(--pixel);font-size:.78rem;letter-spacing:.32em;color:var(--ink);
+  animation:blink 1.25s steps(2,jump-none) infinite;padding-left:.32em}
+@keyframes blink{50%{opacity:0}}
+#title .press::before{content:"▼";display:block;margin-bottom:.7em;color:var(--gold)}
+
+/* ========== 共通: ステージ ========== */
+.stage{position:relative;padding:120px 0 140px;overflow:hidden}
+.stage .wrap{position:relative;z-index:2} /* 視差レイヤーより常に前 */
+.stage-head{margin-bottom:64px}
+.stage-no{font-family:var(--pixel);font-size:.7rem;letter-spacing:.34em;color:var(--gold);margin-bottom:1.6em}
+h2.stage-title{font-family:var(--serif);font-weight:600;font-size:clamp(1.65rem,5.4vw,2.6rem);
+  letter-spacing:.03em;line-height:1.5;position:relative;display:inline-block}
+/* E2: ?ブロック（叩く→バウンド→コインがHUDへ飛ぶ。SEはバウンドの瞬間） */
+.qblock{width:34px;height:34px;image-rendering:pixelated;display:block;margin:0 0 14px;
+  cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;
+  filter:drop-shadow(0 4px 10px rgba(0,0,0,.5))}
+.qblock:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.qblock.bump{animation:qbump .3s cubic-bezier(.3,1.6,.5,1)}
+@keyframes qbump{35%{transform:translateY(-12px)}100%{transform:translateY(0)}}
+.fly-coin{position:fixed;z-index:150;width:16px;height:16px;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle at 35% 30%,var(--gold-bright),var(--gold) 55%,#b9903f);
+  box-shadow:inset 0 0 0 2px #8a6a2a,0 0 10px rgba(233,189,99,.9);
+  transition:transform .6s cubic-bezier(.25,.6,.35,1),opacity .6s ease}
+.stage-lead{color:var(--muted);max-width:38em;margin-top:1.4em;font-size:.96rem}
+
+/* 出現フェード（reduced-motionではJS側で即revealed付与） */
+[data-fx]{opacity:0;transform:translateY(26px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.3,1)}
+[data-fx].revealed{opacity:1;transform:none}
+@media (prefers-reduced-motion: reduce){
+  [data-fx]{opacity:1;transform:none;transition:none}
+  #title .press,#title .stars{animation:none}
+}
+
+/* ========== RPGウィンドウ（E3） ========== */
+.rpg-window{background:var(--window-bg);border:3px solid var(--window-border);border-radius:6px;
+  box-shadow:0 0 0 3px var(--window-bg),0 0 0 4.5px rgba(242,236,221,.35),0 24px 60px -20px rgba(0,0,0,.8);
+  padding:26px 30px;max-width:620px;position:relative}
+.rpg-window .type-target{font-family:var(--pixel);font-size:.92rem;line-height:2.15;
+  letter-spacing:.08em;min-height:4.3em;color:var(--ink)}
+.rpg-window .type-target.type-done::after{content:"▼";display:inline-block;margin-left:.5em;
+  color:var(--gold);font-size:.8em;animation:blink 1.1s steps(2,jump-none) infinite}
+.rpg-window .who{position:absolute;top:-1.05em;left:22px;background:var(--window-bg);
+  border:2px solid var(--window-border);padding:.05em .8em;
+  font-family:var(--pixel);font-size:.7rem;letter-spacing:.22em;color:var(--gold-bright)}
+
+/* ========== STAGE 1: ゲーム ========== */
+#stage-game{background:linear-gradient(180deg,var(--bg) 0%,var(--bg-warm) 30%,var(--bg-warm) 100%)}
+/* E4: 視差レイヤー（CSS描画の雲・山） */
+.pxl-layer{position:absolute;left:-5%;width:110%;pointer-events:none;will-change:transform}
+.pxl-clouds{top:6%;height:120px;opacity:.3;background:
+  radial-gradient(60px 22px at 12% 60%,#2c3560 98%,transparent),
+  radial-gradient(90px 26px at 38% 40%,#272f56 98%,transparent),
+  radial-gradient(70px 24px at 71% 65%,#2c3560 98%,transparent),
+  radial-gradient(50px 18px at 91% 35%,#272f56 98%,transparent)}
+.pxl-hills{bottom:-40px;height:260px;opacity:.55;background:
+  radial-gradient(340px 240px at 15% 100%,#1c2348 99%,transparent),
+  radial-gradient(430px 300px at 55% 100%,#181e3e 99%,transparent),
+  radial-gradient(300px 210px at 88% 100%,#1c2348 99%,transparent)}
+.works{display:flex;flex-direction:column;gap:72px;position:relative}
+.work{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:36px;align-items:center}
+.work.alt{grid-template-columns:minmax(0,5fr) minmax(0,7fr)}
+.work.alt .work-media{order:2}
+.work-media{position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden;
+  box-shadow:0 30px 70px -30px rgba(0,0,0,.85);background:#05060d}
+.work-media video,.work-media img{width:100%;aspect-ratio:16/10;object-fit:cover}
+.work-media.portrait video{object-fit:contain;background:#05060d} /* 縦動画は切り抜かず全体表示 */
+/* E5: 「じつれきを てにいれた！」 */
+.itemget{position:absolute;top:12px;left:12px;font-family:var(--pixel);font-size:.66rem;
+  letter-spacing:.16em;color:#241a05;background:var(--gold);padding:.35em .8em;border-radius:3px;
+  box-shadow:0 4px 14px rgba(0,0,0,.5);opacity:0;transform:translateY(8px) scale(.9)}
+.work.revealed .itemget{animation:itemget .55s .35s cubic-bezier(.2,.9,.3,1.4) forwards}
+@keyframes itemget{to{opacity:1;transform:none}}
+.work-body .tag{font-family:var(--pixel);font-size:.68rem;letter-spacing:.26em;color:var(--gold)}
+.work-body h3{font-family:var(--serif);font-weight:600;font-size:clamp(1.25rem,3.6vw,1.6rem);margin:.5em 0 .6em;letter-spacing:.02em}
+.work-body p{color:var(--muted);font-size:.93rem;max-width:30em}
+.play-row{margin-top:1.6em;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.badge-live{display:inline-flex;align-items:center;gap:.5em;font-family:var(--pixel);font-size:.66rem;
+  letter-spacing:.14em;color:var(--green);border:1px solid rgba(126,232,162,.4);padding:.4em .9em;border-radius:3px}
+.badge-live::before{content:"";width:7px;height:7px;background:var(--green);border-radius:1px;
+  box-shadow:0 0 8px var(--green);animation:blink 1.4s steps(2,jump-none) infinite}
+.game-cta{margin-top:88px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.note-coconala{width:100%;color:var(--faint);font-size:.82rem;margin-top:.6em}
+
+/* ========== ボタン ========== */
+.btn{display:inline-flex;align-items:center;gap:.6em;text-decoration:none;cursor:pointer;
+  font-weight:700;font-size:.92rem;padding:.9em 1.7em;border-radius:4px;
+  transition:transform .15s,box-shadow .15s;position:relative}
+.btn-gold{background:linear-gradient(120deg,var(--gold),var(--gold-bright));color:#241a05;
+  box-shadow:0 6px 0 #96742e,0 18px 40px -14px rgba(233,189,99,.5)}
+.btn-gold:hover{transform:translateY(2px);box-shadow:0 4px 0 #96742e,0 14px 30px -12px rgba(233,189,99,.5)}
+.btn-gold:active{transform:translateY(6px);box-shadow:0 0 0 #96742e}
+.btn-frame{border:2px solid var(--ink);color:var(--ink);background:transparent;
+  box-shadow:0 6px 0 rgba(242,236,221,.25)}
+.btn-frame:hover{transform:translateY(2px);box-shadow:0 4px 0 rgba(242,236,221,.25);border-color:var(--gold);color:var(--gold-bright)}
+.btn .arrow{font-family:var(--pixel)}
+
+/* ========== STAGE 2: 映像 / STAGE 3: Web ========== */
+#stage-video{background:linear-gradient(180deg,var(--bg-warm),var(--bg-video))}
+#stage-web{background:linear-gradient(180deg,var(--bg-video),var(--bg-web))}
+.duo{display:grid;grid-template-columns:1fr;gap:44px;max-width:660px}
+.duo .fact{border-left:3px solid var(--gold);padding:.2em 0 .2em 1.4em;color:var(--muted);font-size:.93rem}
+.duo .fact b{color:var(--ink);font-weight:600}
+.small-note{color:var(--faint);font-size:.82rem;margin-top:1.2em}
+.selfproof{font-family:var(--pixel);font-size:.78rem;letter-spacing:.12em;color:var(--green);
+  border:1px dashed rgba(126,232,162,.45);padding:1em 1.4em;border-radius:4px;max-width:34em;line-height:2.1}
+
+/* ========== つくりかた（クエストログ形式） ========== */
+#flow{background:linear-gradient(180deg,var(--bg-web),var(--bg))}
+.quests{max-width:640px;display:flex;flex-direction:column;gap:0;counter-reset:q}
+.quest{position:relative;padding:26px 0 26px 58px;border-bottom:1px dashed var(--line)}
+.quest:last-child{border-bottom:none}
+.quest::before{counter-increment:q;content:counter(q);position:absolute;left:0;top:26px;
+  width:36px;height:36px;display:grid;place-items:center;
+  font-family:var(--pixel);font-size:.85rem;color:var(--gold-bright);
+  border:2px solid var(--gold);border-radius:3px;background:rgba(233,189,99,.08);
+  transform:rotate(45deg)}
+.quest::after{content:counter(q);position:absolute;left:0;top:26px;width:36px;height:36px;
+  display:grid;place-items:center;font-family:var(--pixel);font-size:.85rem;color:var(--gold-bright)}
+.quest::before{color:transparent}
+.quest h3{font-size:1.02rem;font-weight:600;letter-spacing:.04em}
+.quest p{color:var(--muted);font-size:.9rem;margin-top:.3em;max-width:30em}
+
+/* ========== CLEAR!（問い合わせ） ========== */
+#clear{background:
+  radial-gradient(700px 380px at 50% 0%,rgba(126,232,162,.12),transparent 60%),
+  linear-gradient(180deg,var(--bg),var(--bg-clear) 140%);text-align:center;padding-bottom:190px}
+.clear-word{font-family:var(--pixel);font-weight:700;font-size:clamp(2.6rem,11vw,5rem);
+  letter-spacing:.18em;padding-left:.18em;color:var(--gold-bright);
+  text-shadow:3px 3px 0 #96742e,6px 6px 0 rgba(0,0,0,.45)}
+.clear-sub{font-family:var(--serif);font-size:clamp(1.15rem,3.6vw,1.6rem);margin:1.2em 0 .4em;letter-spacing:.04em}
+.result{display:inline-block;text-align:left;margin:2.2em auto 2.6em;font-family:var(--pixel);
+  font-size:.82rem;letter-spacing:.14em;line-height:2.5;color:var(--muted)}
+.result b{color:var(--ink);font-weight:400}
+.result .dots{color:var(--faint)}
+.clear-cta{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.clear-note{margin-top:2.4em;color:var(--faint);font-size:.82rem}
+
+/* ========== フッター ========== */
+footer{border-top:1px solid var(--line);padding:34px 0 120px;text-align:center;color:var(--faint);font-size:.8rem}
+footer .logo{font-family:var(--serif);font-size:1rem;color:var(--muted);margin-bottom:.5em}
+footer .logo b{color:var(--gold)}
+
+/* ========== E9: 歩くキャラ / 地面 ========== */
+#ground{position:fixed;left:0;right:0;bottom:0;height:10px;z-index:90;pointer-events:none;
+  background:repeating-linear-gradient(90deg,rgba(233,189,99,.5) 0 14px,transparent 14px 24px);
+  opacity:.35}
+#walker{position:fixed;left:0;bottom:8px;z-index:91;pointer-events:none;will-change:transform}
+@media (prefers-reduced-motion: reduce){#walker,#ground{display:none}}
+
+/* ========== 隠しコマンド ========== */
+.confetti{position:fixed;top:-14px;width:9px;height:9px;z-index:200;pointer-events:none;
+  animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(720deg)}}
+#secret-msg{position:fixed;left:50%;bottom:90px;transform:translate(-50%,20px);z-index:210;
+  background:var(--window-bg);border:3px solid var(--window-border);border-radius:6px;
+  padding:16px 22px;font-family:var(--pixel);font-size:.8rem;letter-spacing:.1em;line-height:2;
+  opacity:0;pointer-events:none;transition:.4s;max-width:88vw;text-align:center}
+#secret-msg.show{opacity:1;transform:translate(-50%,0)}
+#secret-msg b{color:var(--gold-bright)}
+
+/* ========== モバイル ========== */
+@media (max-width:760px){
+  .stage{padding:88px 0 100px}
+  .pxl-clouds{display:none} /* モバイルは見出し可読性を優先 */
+  .work,.work.alt{grid-template-columns:1fr}
+  .work.alt .work-media{order:0}
+  .rpg-window{padding:20px 20px}
+  .rpg-window .type-target{font-size:.82rem}
+  .hud-left{font-size:.9rem}
+  .hud-chip{font-size:.62rem}
+  #title .sub br.pc-only{display:none}
+}
