@@ -15,7 +15,8 @@
   --wrap:1040px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;
+  -webkit-text-size-adjust:100%;text-size-adjust:100%} /* iOS Safariの勝手な文字拡大を禁止（RPGウィンドウ巨大化バグ対策） */
 body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.9;
   -webkit-font-smoothing:antialiased;overflow-x:hidden}
 img,video,canvas{max-width:100%;display:block}
@@ -134,7 +135,7 @@ h2.stage-title{font-family:var(--serif);font-weight:600;font-size:clamp(1.65rem,
   box-shadow:0 0 0 3px var(--window-bg),0 0 0 4.5px rgba(242,236,221,.35),0 24px 60px -20px rgba(0,0,0,.8);
   padding:26px 30px;max-width:620px;position:relative}
 .rpg-window .type-target{font-family:var(--pixel);font-size:.92rem;line-height:2.15;
-  letter-spacing:.08em;min-height:4.3em;color:var(--ink)}
+  letter-spacing:.08em;min-height:4.3em;color:var(--ink);overflow-wrap:anywhere}
 .rpg-window .type-target.type-done::after{content:"▼";display:inline-block;margin-left:.5em;
   color:var(--gold);font-size:.8em;animation:blink 1.1s steps(2,jump-none) infinite}
 .rpg-window .who{position:absolute;top:-1.05em;left:22px;background:var(--window-bg);
